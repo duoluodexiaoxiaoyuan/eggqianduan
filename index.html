@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- <script src="./jquery-3.6.0.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <form @submit.prevent="postData">
+        <input type="text" v-model="fruit" />
+        <button>提交</button>
+      </form>
+      <ul>
+        <li v-for="(item,index) of fruitList" :key="index">
+          {{item}}
+          <button @click="del(index)">删除</button>
+        </li>
+      </ul>
+    </div>
+    <script>
+      var app = new Vue({
+        el: "#app",
+        data: {
+          fruitList: [],
+          fruit: "",
+        },
+        created: function () {
+          this.getData();
+        },
+        methods: {
+          getData() {
+            axios.get("http://127.0.0.1:7001/fruits2").then((res) => {
+              this.fruitList = res.data;
+              console.log(this.fruitList);
+            });
+          },
+          postData() {
+            axios
+              .post("http://127.0.0.1:7001/fruits2", { fruit: this.fruit })
+              .then(() => {
+                this.getData();
+              });
+          },
+          del(id) {
+            axios.delete(`http://127.0.0.1:7001/fruits2/${id}`).then(() => {
+              this.getData();
+            });
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>登录页</title>
+  </head>
+  <body>
+    <div id="app">
+      <form @submit.prevent="doLogin">
+        <input type="text" name="username" v-model="user.username" />
+        <input type="password" name="password" v-model="user.password" />
+        <button>登录</button>
+      </form>
+    </div>
+    <script>
+      var app = new Vue({
+        el: "#app",
+        data: {
+          user: {
+            username: "",
+            password: "",
+          },
+        },
+        methods: {
+          doLogin() {
+            axios
+              .post("http://127.0.0.1:7001/jwtLogin", { user: this.user })
+              .then((res) => {
+                if (res.data.code === 20000) {
+                  localStorage.setItem("token", res.data.token);
+                  console.log(res.data.token);
+                  window.location.href = "index.html";
+                }
+              });
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

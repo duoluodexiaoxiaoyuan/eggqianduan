@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>首页</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div>我是首页</div>
+      <button @click="getMessage">获取数据</button>
+      <button @click="logout">注销</button>
+    </div>
+    <script>
+      var app = new Vue({
+        el: "#app",
+        data: {
+          fruitList: [],
+          fruit: "",
+        },
+        methods: {
+          getMessage() {
+            let token = localStorage.getItem("token");
+            // get请求第二个参数可以设置请求头，post第三个参数可以设置请求头
+            axios
+              .get("http://127.0.0.1:7001/jwtMessage", {
+                headers: { token: token },
+              })
+              .then((res) => {
+                console.log(res.data);
+              });
+          },
+          logout() {
+            localStorage.setItem("token", "");
+            //进行页面的刷新
+            location.reload();
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
